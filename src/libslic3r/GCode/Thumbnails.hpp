@@ -54,6 +54,9 @@ inline void export_thumbnails_to_file(ThumbnailsGeneratorCallback &thumbnail_cb,
                         else
                             assert(false);
                         output("; bigtree thumbnail end\n");
+                    }
+                    else if (format == GCodeThumbnailsFormat::TFT) {
+                        // TODO
                     } else {
                         std::string encoded;
                         encoded.resize(boost::beast::detail::base64::encoded_size(compressed->size));

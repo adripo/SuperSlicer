@@ -32,6 +32,12 @@ struct CompressedBIQU : CompressedImageBuffer
     std::string_view tag() const override { return "thumbnail_BIQU"sv; }
 };
 
+struct CompressedTFT : CompressedImageBuffer
+{
+    ~CompressedTFT() override { free(data); }
+    std::string_view tag() const override { return "thumbnail_TFT"sv; }
+};
+
 std::unique_ptr<CompressedImageBuffer> compress_thumbnail_png(const ThumbnailData& data)
 {
     auto out = std::make_unique<CompressedPNG>();
@@ -73,6 +79,11 @@ std::unique_ptr<CompressedImageBuffer> compress_thumbnail_biqu(const ThumbnailDa
     assert(str.size() + 1 == out->size);
     ::memcpy(out->data, (const void*)str.c_str(), out->size);
     return out;
+}
+
+std::unique_ptr<CompressedImageBuffer> compress_thumbnail_tft(const ThumbnailData& data)
+{
+    // TODO
 }
 
 std::unique_ptr<CompressedImageBuffer> compress_thumbnail_jpg(const ThumbnailData& data)
@@ -135,6 +146,8 @@ std::unique_ptr<CompressedImageBuffer> compress_thumbnail(const ThumbnailData &d
             return compress_thumbnail_qoi(data);
         case GCodeThumbnailsFormat::BIQU:
             return compress_thumbnail_biqu(data);
+        case GCodeThumbnailsFormat::TFT:
+            return compress_thumbnail_tft(data);
     }
 }
 
